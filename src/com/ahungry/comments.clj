@@ -18,6 +18,7 @@
   (GET "/comments.js" [] (slurp "resources/comments.js"))
   (GET "/version" [] version)
   (POST "/login" req (handler/login (:body-params req)))
+  (POST "/comment" req (handler/comment (:body-params req)))
   )
 
 (defn wrap-headers [handler]

@@ -22,3 +22,12 @@ POST :url/login
   "password2": "passx"
 }
 #
+
+POST :url/comment
+:headers
+{
+  "username": "test",
+  "password": "pass",
+  "message": "Wow! What a neat tool!"
+}
+#
