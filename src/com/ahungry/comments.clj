@@ -11,21 +11,28 @@
 (defn version [req] {:body "0.0.1"})
 
 (defroutes all-routes
-  (GET "/" [] version)
+  (GET "/" [] (slurp "resources/index.html"))
+  (GET "/comments.js" [] (slurp "resources/comments.js"))
   (GET "/version" [] version))
 
 (defn wrap-headers [handler]
   (fn [req]
-    (let [res (handler req)]
-      (-> res
-          (assoc-in [:headers "content-type"] "application/json")
-          ))))
+    (let [res (handler req)
+          content-type (get-in res [:headers "Content-Type"])]
+      (if content-type
+        res
+        (-> res
+            (assoc-in [:headers "Content-Type"] "application/json")
+            )))))
 
 (defn wrap-json [handler]
   (fn [req]
-    (let [res (handler req)]
-      (-> res
-          (update-in [:body] cheshire/generate-string)))))
+    (let [res (handler req)
+          content-type (get-in res [:headers "Content-Type"])]
+      (if (= "application/json" content-type)
+        (-> res
+            (update-in [:body] cheshire/generate-string))
+        res))))
 
 (defn wrap-cors [handler]
   (fn [req]

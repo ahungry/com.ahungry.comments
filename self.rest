@@ -9,3 +9,7 @@ content-type: application/json
 GET :url/version
 :headers
 #
+
+GET :url
+:headers
+#
