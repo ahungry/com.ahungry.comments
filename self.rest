@@ -1,0 +1,11 @@
+# -*- mode: restclient -*-
+
+:url = http://localhost:3001
+
+:headers = <<
+content-type: application/json
+#
+
+GET :url/version
+:headers
+#
