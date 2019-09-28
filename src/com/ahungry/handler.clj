@@ -35,5 +35,6 @@
         (dao/save-comment m))))
 
 (defn comments [req]
+  (log/info "Request input was: " req)
   (with-json req
     (do @dao/*comments)))
