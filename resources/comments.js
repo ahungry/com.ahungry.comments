@@ -1,4 +1,4 @@
-console.debug('com.ahungry.comments begin.')
+console.log('com.ahungry.comments begin.')
 
 const baseUrl = 'http://localhost:3001'
 
@@ -39,7 +39,7 @@ async function postData (url = '', data = {}) {
 //   const data = await postData('http://example.com/answer', { answer: 42 });
 //   console.log(JSON.stringify(data)); // JSON-string from `response.json()` call
 // } catch (error) {
-//   console.error(error);
+//   console.log(error);
 // }
 
 const ce = x => document.createElement(x)
@@ -68,9 +68,9 @@ function form () {
       try {
         const comment = $('#comment')[0].value
         const res = await postData('/comment', { username: 'Test', password: 'Test', comment })
-        console.debug('Post send back: ', res)
+        console.log('Post send back: ', res)
       } catch (reason) {
-        console.error(reason)
+        console.log(reason)
       }
     }, 10)
 
@@ -91,4 +91,4 @@ async function init () {
 }
 
 init()
-console.debug('com.ahungry.comments fin.')
+console.log('com.ahungry.comments fin.')
