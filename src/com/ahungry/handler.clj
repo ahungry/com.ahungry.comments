@@ -23,20 +23,17 @@
 
 (defn login [m]
   (with-json m
-    (do
-      (assert-password m)
-      (dao/save m))))
+    (do (assert-password m)
+        (dao/save m))))
 
 (defn assert-comment [_]
   true)
 
 (defn comment [m]
   (with-json m
-    (do
-      (assert-comment m)
-      (dao/save-comment m))))
+    (do (assert-comment m)
+        (dao/save-comment m))))
 
 (defn comments [req]
   (with-json req
-    (do
-      @dao/*comments)))
+    (do @dao/*comments)))
