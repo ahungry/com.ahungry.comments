@@ -1,6 +1,6 @@
 # com.ahungry.comments
 
-FIXME: description
+Comment system.
 
 ## Installation
 
