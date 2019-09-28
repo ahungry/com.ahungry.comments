@@ -4,7 +4,9 @@
    [compojure.core :refer [defroutes GET POST DELETE ANY OPTIONS context] :as cc]
    [cheshire.core :as cheshire]
    [ring.middleware.params :as rmp]
-   [org.httpkit.server :as server])
+   [org.httpkit.server :as server]
+   [com.ahungry.handler :as handler]
+   )
   (:gen-class))
 
 (def ^:dynamic *port* 3001)
@@ -12,13 +14,17 @@
 
 (defroutes all-routes
   (GET "/" [] (slurp "resources/index.html"))
+  (GET "/comments.css" [] (slurp "resources/comments.css"))
   (GET "/comments.js" [] (slurp "resources/comments.js"))
-  (GET "/version" [] version))
+  (GET "/version" [] version)
+  (POST "/login" req (handler/login (:body-params req)))
+  )
 
 (defn wrap-headers [handler]
   (fn [req]
     (let [res (handler req)
           content-type (get-in res [:headers "Content-Type"])]
+      (log/info res)
       (if content-type
         res
         (-> res

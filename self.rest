@@ -13,3 +13,12 @@ GET :url/version
 GET :url
 :headers
 #
+
+POST :url/login
+:headers
+{
+  "username": "test",
+  "password1": "pass",
+  "password2": "passx"
+}
+#
