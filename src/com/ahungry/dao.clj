@@ -5,3 +5,8 @@
 
 (defn save [x]
   x)
+
+(def *comments (atom []))
+
+(defn save-comment [m]
+  (swap! *comments conj m))

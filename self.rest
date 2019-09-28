@@ -28,6 +28,10 @@ POST :url/comment
 {
   "username": "test",
   "password": "pass",
-  "message": "Wow! What a neat tool!"
+  "message": "Good stuff"
 }
+#
+
+GET :url/comments
+:headers
 #

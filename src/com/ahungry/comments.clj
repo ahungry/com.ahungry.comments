@@ -17,6 +17,7 @@
   (GET "/comments.css" [] (slurp "resources/comments.css"))
   (GET "/comments.js" [] (slurp "resources/comments.js"))
   (GET "/version" [] version)
+  (GET "/comments" req (handler/comments req))
   (POST "/login" req (handler/login (:body-params req)))
   (POST "/comment" req (handler/comment (:body-params req)))
   )

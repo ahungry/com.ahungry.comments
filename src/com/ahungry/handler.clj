@@ -34,4 +34,9 @@
   (with-json m
     (do
       (assert-comment m)
-      (dao/save m))))
+      (dao/save-comment m))))
+
+(defn comments [req]
+  (with-json req
+    (do
+      @dao/*comments)))
