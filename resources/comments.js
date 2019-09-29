@@ -43,7 +43,8 @@ async function postData (url = '', data = {}) {
 // }
 
 const ce = x => document.createElement(x)
-const $ = x => document.querySelectorAll(x)
+const $ = x => document.querySelector(x)
+const $$ = x => document.querySelectorAll(x)
 
 function labeledInput (type, lbl) {
   const label = ce('label')
@@ -51,11 +52,42 @@ function labeledInput (type, lbl) {
   const span = ce('span')
   label.innerHTML = lbl
   input.type = type
-  input.id = 'comment'
+  input.id = 'message'
   span.appendChild(label)
   span.appendChild(input)
 
   return span
+}
+
+function renderComment ({ message }) {
+  const el = ce('div')
+  el.innerHTML = message
+
+  console.log(message)
+
+  return el
+}
+
+var elCommentsContainer
+
+function makeCommentsContainer () {
+  const el = $('#comments')
+
+  if (el) {
+    el.parentNode.removeChild(el)
+  }
+
+  elCommentsContainer = ce('div')
+  elCommentsContainer.id = 'comments'
+  document.body.appendChild(elCommentsContainer)
+
+  return elCommentsContainer
+}
+
+function renderComments (comments) {
+  const elC = makeCommentsContainer()
+
+  comments.map(renderComment).map(el => elC.appendChild(el))
 }
 
 function form () {
@@ -66,9 +98,11 @@ function form () {
     e.preventDefault()
     setTimeout(async () => {
       try {
-        const comment = $('#comment')[0].value
-        const res = await postData('/comment', { username: 'Test', password: 'Test', comment })
+        const message = $('#message').value
+        const res = await postData('/comment', { username: 'Test', password: 'Test', message })
         console.log('Post send back: ', res)
+        $('#message').value = ''
+        renderComments(res)
       } catch (reason) {
         console.log(reason)
       }
@@ -80,14 +114,15 @@ function form () {
   return el
 }
 
+async function doComments () {
+  const comments = await getData('/comments')
+
+  return renderComments(comments)
+}
+
 async function init () {
   document.body.appendChild(form())
-  const comments = await getData('/comments')
-  console.log(comments)
-  const el = ce('div')
-  const x = JSON.stringify(comments)
-  el.innerHTML = x
-  document.body.appendChild(el)
+  await doComments()
 }
 
 init()
