@@ -1,5 +1,6 @@
 console.log('com.ahungry.comments begin.')
 
+// Net
 const baseUrl = 'http://localhost:3001'
 
 async function getData (url) {
@@ -34,18 +35,12 @@ async function postData (url = '', data = {}) {
   return await response.json(); // parses JSON response into native JavaScript objects
 }
 
-// Example POST method implementation:
-// try {
-//   const data = await postData('http://example.com/answer', { answer: 42 });
-//   console.log(JSON.stringify(data)); // JSON-string from `response.json()` call
-// } catch (error) {
-//   console.log(error);
-// }
-
+// Util
 const ce = x => document.createElement(x)
 const $ = x => document.querySelector(x)
 const $$ = x => document.querySelectorAll(x)
 
+// GUI
 function labeledInput (type, lbl) {
   const label = ce('label')
   const input = ce('input')
@@ -59,38 +54,14 @@ function labeledInput (type, lbl) {
   return span
 }
 
-function renderComment ({ message }) {
+function makeWrapper () {
   const el = ce('div')
-  el.innerHTML = message
-
-  console.log(message)
+  el.id = 'wrapper'
 
   return el
 }
 
-var elCommentsContainer
-
-function makeCommentsContainer () {
-  const el = $('#comments')
-
-  if (el) {
-    el.parentNode.removeChild(el)
-  }
-
-  elCommentsContainer = ce('div')
-  elCommentsContainer.id = 'comments'
-  document.body.appendChild(elCommentsContainer)
-
-  return elCommentsContainer
-}
-
-function renderComments (comments) {
-  const elC = makeCommentsContainer()
-
-  comments.map(renderComment).map(el => elC.appendChild(el))
-}
-
-function form () {
+function makeForm () {
   const el = ce('form')
   el.appendChild(labeledInput('text', 'Comment: '))
   el.appendChild(ce('submit'))
@@ -114,6 +85,45 @@ function form () {
   return el
 }
 
+var elCommentsContainer
+
+function renderComment ({ message }) {
+  const el = ce('div')
+  el.innerHTML = message
+
+  console.log(message)
+
+  return el
+}
+
+function makeCommentsContainer () {
+  const el = $('#comments')
+
+  if (el) {
+    el.parentNode.removeChild(el)
+  }
+
+  elCommentsContainer = ce('div')
+  elCommentsContainer.id = 'comments'
+  gui.wrapper.appendChild(elCommentsContainer)
+
+  return elCommentsContainer
+}
+
+function renderComments (comments) {
+  const elC = makeCommentsContainer()
+
+  comments.map(renderComment).map(el => elC.appendChild(el))
+
+  return elC
+}
+
+// Main things
+const gui = {
+  form: makeForm(),
+  wrapper: makeWrapper(),
+}
+
 async function doComments () {
   const comments = await getData('/comments')
 
@@ -121,8 +131,10 @@ async function doComments () {
 }
 
 async function init () {
-  document.body.appendChild(form())
-  await doComments()
+  gui.wrapper.appendChild(gui.form)
+  const comments = await doComments()
+  gui.wrapper.appendChild(comments)
+  document.body.appendChild(gui.wrapper)
 }
 
 init()
