@@ -12,27 +12,15 @@ async function getData (url) {
 async function postData (url = '', data = {}) {
   url = baseUrl + url
 
-  // alert(url)
-  // alert(JSON.stringify(data))
-
-  // Default options are marked with *
   const response = await fetch(url, {
-    method: 'POST', // *GET, POST, PUT, DELETE, etc.
-    // mode: 'no-cors', // no-cors, *cors, same-origin
-    // cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-    // credentials: 'same-origin', // include, *same-origin, omit
+    method: 'POST',
     headers: {
       'Content-Type': 'application/json'
-      // 'Content-Type': 'application/x-www-form-urlencoded',
     },
-    // redirect: 'follow', // manual, *follow, error
-    // referrer: 'no-referrer', // no-referrer, *client
-    body: JSON.stringify(data) // body data type must match "Content-Type" header
+    body: JSON.stringify(data)
   })
 
-  // alert(JSON.stringify(response))
-
-  return await response.json(); // parses JSON response into native JavaScript objects
+  return await response.json();
 }
 
 // Util
@@ -43,15 +31,24 @@ const $$ = x => document.querySelectorAll(x)
 // GUI
 function labeledInput (type, lbl) {
   const label = ce('label')
-  const input = ce('input')
+  const input = ce('textarea')
   const span = ce('span')
   label.innerHTML = lbl
   input.type = type
   input.id = 'message'
+  input.style.width = '300px'
+  input.style.height = '100px'
   span.appendChild(label)
   span.appendChild(input)
 
   return span
+}
+
+function makeSubmit () {
+  const el = ce('button')
+  el.innerHTML = 'Submit'
+
+  return el
 }
 
 function makeWrapper () {
@@ -65,6 +62,7 @@ function makeForm () {
   const el = ce('form')
   el.appendChild(labeledInput('text', 'Comment: '))
   el.appendChild(ce('submit'))
+  el.appendChild(makeSubmit())
   el.onsubmit = async (e) => {
     e.preventDefault()
     setTimeout(async () => {
