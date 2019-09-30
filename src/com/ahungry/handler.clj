@@ -24,7 +24,7 @@
 (defn login [m]
   (with-json m
     (do (assert-password m)
-        (dao/save m))))
+        (dao/save-user m))))
 
 (defn assert-comment [_]
   true)
@@ -37,4 +37,4 @@
 (defn comments [req]
   (log/info "Request input was: " req)
   (with-json req
-    (do @dao/*comments)))
+    (do (dao/get-comments))))

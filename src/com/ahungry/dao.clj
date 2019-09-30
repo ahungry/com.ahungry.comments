@@ -17,26 +17,27 @@
    :subname (data-dir-db)})
 
 (defn wipe-db []
-  (jdbc/execute! db ["
-DROP TABLE IF EXISTS user;
-DROP TABLE IF EXISTS comment;
-"]))
+  (jdbc/execute! db ["DROP TABLE IF EXISTS user;"])
+  (jdbc/execute! db ["DROP TABLE IF EXISTS comment;"]))
 
 (defn make-db []
   (jdbc/execute! db ["
 CREATE TABLE IF NOT EXISTS user (
   username PRIMARY KEY UNIQUE,
   password
-);
-
+);"])
+  (jdbc/execute! db ["
 CREATE TABLE IF NOT EXISTS comment (
-  username,
-  date,
-  message,
-  href,
-  PRIMARY KEY (message, href) UNIQUE
-);
-"]))
+  username NOT NULL,
+  date NOT NULL,
+  message NOT NULL,
+  href NOT NULL,
+  PRIMARY KEY (message, href)
+);"]))
+
+(defn reload-db []
+  (wipe-db)
+  (make-db))
 
 (defn time-now []
   (str (t/local-date-time)))
@@ -69,8 +70,19 @@ CREATE TABLE IF NOT EXISTS comment (
           \' "&#39;"})
        text) state])
 
+(defn get-users []
+  (q ["SELECT * FROM user"]))
+
+(defn get-comments []
+  (q ["SELECT * FROM comment"]))
+
 (defn get-user [username password]
   (q ["SELECT * from user WHERE username = ? AND password = ? " username password]))
+
+(defn prettify [{:keys [message]}]
+  (md/md-to-html-string
+   message
+   :replacement-transformers (into [escape-images escape-html] mt/transformer-vector)))
 
 (defn save-user
   "Persist a user account into the database."
@@ -85,18 +97,14 @@ CREATE TABLE IF NOT EXISTS comment (
           :created)
       (catch Exception e (log/error (str e)) false))))
 
-(defn save [x]
-  x)
-
-(def *comments (atom []))
-
-(defn prettify [{:keys [message]}]
-  (md/md-to-html-string
-   message
-   :replacement-transformers (into [escape-images escape-html] mt/transformer-vector)))
-
-(defn save-comment [m]
-  (let [html (prettify m)
-        date (java.util.Date.)]
-    (swap! *comments conj (conj m {:date date
-                                   :message html}))))
+(defn save-comment
+  "Persist a user account into the database."
+  [{:keys [username password message href]}]
+  (try
+    (do (jdbc/insert! db "comment"
+                      {:username username
+                       :message (prettify message)
+                       :date (str (time-now))
+                       :href href})
+        :created)
+    (catch Exception e (log/error (str e)) false)))
