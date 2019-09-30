@@ -32,5 +32,7 @@
    :replacement-transformers (into [escape-images escape-html] mt/transformer-vector)))
 
 (defn save-comment [m]
-  (let [html (prettify m)]
-    (swap! *comments conj (conj m {:message html}))))
+  (let [html (prettify m)
+        date (java.util.Date.)]
+    (swap! *comments conj (conj m {:date date
+                                   :message html}))))
