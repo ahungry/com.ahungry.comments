@@ -6,9 +6,11 @@
    [ring.middleware.params :as rmp]
    [org.httpkit.server :as server]
    [com.ahungry.handler :as handler]
+   [com.ahungry.dao :as dao]
    )
   (:gen-class))
 
+(dao/make-db)
 (def ^:dynamic *port* 3001)
 (defn version [req] {:body "0.0.1"})
 
