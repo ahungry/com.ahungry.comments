@@ -14,7 +14,7 @@
 
 (defroutes all-routes
   (GET "/" [] (slurp "resources/index.html"))
-  (GET "/comments.css" [] (slurp "resources/comments.css"))
+  (GET "/comments.css" [] {:body (slurp "resources/comments.css") :headers {"Content-Type" "text/css"}})
   (GET "/comments.js" [] (slurp "resources/comments.js"))
   (GET "/version" [] version)
   (GET "/comments" req (handler/comments req))

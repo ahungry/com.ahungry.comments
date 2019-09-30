@@ -2,8 +2,10 @@ console.log('com.ahungry.comments begin.')
 
 // Net
 const baseUrl = 'http://localhost:3001'
+var sourceHref = window.location.href
 
 async function getData (url) {
+  url = url + '?sourceHref=' + sourceHref
   const response = await fetch(url, { method: 'GET' })
 
   return await response.json()
@@ -17,7 +19,7 @@ async function postData (url = '', data = {}) {
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify(data)
+    body: JSON.stringify({ sourceHref, ...data })
   })
 
   return await response.json();
@@ -134,7 +136,7 @@ function makeFormLoggedOut () {
           }
 
           if (res.username) {
-            $('#feedback').innerHTML = 'Logged in'
+            $('#feedback').innerHTML = ''
             doLogin(res)
           }
         } catch (reason) {
@@ -214,7 +216,62 @@ async function init () {
   gui.wrapper.appendChild(gui.form)
   gui.wrapper.appendChild(gui.feedback)
   document.body.appendChild(gui.wrapper)
+
+  window.parent.postMessage({
+    type: 'resize',
+    w: gui.wrapper.scrollWidth,
+    h: gui.wrapper.scrollHeight + 200,
+  }, '*')
 }
 
-init()
+window.addEventListener('message', receiveMessage, false);
+
+var wasGetHrefDone = false
+
+function handler (m) {
+  switch (m.type) {
+    case 'getHref':
+      sourceHref = m.val
+      wasGetHrefDone = true
+      break
+  }
+}
+function receiveMessage (event) {
+  // Events that get handled up at the potential iframe source.
+  const { data } = event
+  handler(data)
+  // if (event.origin === 'http://comments.ahungry.com' ||
+  //   event.origin === 'http://localhost:3001') {
+  //   const { data } = event
+  //   handler(data)
+  // }
+}
+
+function didSetup () {
+  return wasGetHrefDone
+}
+
+function slowInit () {
+  // Incase they are iframing it
+  if (window && window.parent && window.parent.postMessage) {
+    window.parent.postMessage({
+      type: 'getHref',
+    }, '*')
+  }
+
+  if (!didSetup()) {
+    return setTimeout(() => {
+      slowInit()
+    }, 10)
+  }
+
+  init()
+}
+// Stagger loading until we get the proper source href
+if (window.parent) {
+  slowInit()
+} else {
+  init()
+}
+
 console.log('com.ahungry.comments fin.')
