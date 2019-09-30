@@ -1,0 +1,15 @@
+;; -*- mode: clojure -*-
+
+;; https://github.com/candid82/joker
+{:known-macros
+ [[slingshot.slingshot/try+ [catch]]
+ [compojure.core/defroutes [name & r]]
+ [compojure.core/GET [& r]]
+ [compojure.core/POST [& r]]
+ [use-fixtures [& r]]
+ [deftest [& r]]]}
+
+{:known-symbols
+ [all-routes deftest use-fixtures]}
+
+;; {:known-namespaces [clojure.java.shell]}
