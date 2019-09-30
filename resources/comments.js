@@ -61,6 +61,9 @@ function makeSubmit () {
 function makeWrapper () {
   const el = ce('div')
   el.id = 'wrapper'
+  el.style.border = '1px solid #000'
+  el.style.margin = 'auto'
+  el.style.padding = '50px'
 
   return el
 }
@@ -89,15 +92,16 @@ var gui = {
 function makeForm (inputs, cb) {
   const el = ce('form')
 
-  console.log('Here i am in the form')
+  el.innerHTML = `<h3>Sign in or comment:</h3>
+<p style='font-size:.8rem;'>
+If you've never commented before, a new account will be created for you.
+Don't forget your password.
+</p>
+`
+
   inputs.forEach(input => {
     el.appendChild(gui[input])
   })
-  // el.appendChild(labeledInput('Username: ', 'username'))
-  // el.appendChild(labeledPassword('Password: ', 'password'))
-  // el.appendChild(labeledTextarea('Comment (supports markdown): ', 'message', { width: '300px', 'height': '100px' }))
-  // el.appendChild(ce('submit'))
-  // el.appendChild(makeSubmit())
   el.onsubmit = cb
 
   return el
@@ -124,15 +128,18 @@ function makeFormLoggedOut () {
           const password1 = $('#password1').value
           const password2 = $('#password2').value
           const res = await postData('/login', { username, password1, password2 })
-          console.log('Post send back: ', res)
+
           if (res && res.error) {
             $('#feedback').innerHTML = res.error
           }
+
           if (res.username) {
+            $('#feedback').innerHTML = 'Logged in'
             doLogin(res)
           }
         } catch (reason) {
-          console.log(reason)
+          $('#feedback').innerHTML = JSON.stringify(reason)
+          console.error(reason)
         }
       }, 10)
     })
@@ -201,11 +208,11 @@ async function doComments () {
 }
 
 async function init () {
+  const comments = await doComments()
+  gui.wrapper.appendChild(comments)
   gui.form = makeFormLoggedOut()
   gui.wrapper.appendChild(gui.form)
   gui.wrapper.appendChild(gui.feedback)
-  const comments = await doComments()
-  gui.wrapper.appendChild(comments)
   document.body.appendChild(gui.wrapper)
 }
 
