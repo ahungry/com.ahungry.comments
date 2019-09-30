@@ -194,10 +194,11 @@ function makeCommentsContainer () {
   }
 
   el.innerHTML = `
-Comments for:
-<br><span style="font-size:.8em">${sourceHref}</span>
+Comments for <b>${sourceHref}</b>
 <br><span style="font-size:.7em">hosted by
-<a href="http://comments.ahungry.com">http://comments.ahungry.com</a></span>
+<a href="http://comments.ahungry.com" target="_blank">http://comments.ahungry.com</a></span>
+<br><span style="font-size:.7em">AGPLv3 source
+<a href="https://github.com/ahungry/com.ahungry.comments" target="_blank">https://github.com/ahungry/com.ahungry.comments</a></span>
 `
 
   return el
