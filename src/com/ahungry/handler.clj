@@ -37,4 +37,4 @@
 (defn comments [req]
   (log/info "Request input was: " req)
   (with-json req
-    (do (dao/get-comments))))
+    (do (dao/get-comments (get-in req [:query-params :href])))))

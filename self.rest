@@ -19,7 +19,7 @@ POST :url/login
 {
   "username": "test",
   "password1": "pass",
-  "password2": "passx"
+  "password2": "pass"
 }
 #
 
@@ -28,10 +28,11 @@ POST :url/comment
 {
   "username": "test",
   "password": "pass",
-  "message": "Good stuff"
+  "message": "Good stuff",
+  "href": "http://localhost:3001"
 }
 #
 
-GET :url/comments
+GET :url/comments?href=http://localhost:3001
 :headers
 #

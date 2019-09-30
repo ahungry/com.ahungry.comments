@@ -73,8 +73,8 @@ CREATE TABLE IF NOT EXISTS comment (
 (defn get-users []
   (q ["SELECT * FROM user"]))
 
-(defn get-comments []
-  (q ["SELECT * FROM comment"]))
+(defn get-comments [href]
+  (q ["SELECT * FROM comment WHERE href = ?" href]))
 
 (defn get-user [username password]
   (q ["SELECT * from user WHERE username = ? AND password = ? " username password]))
@@ -99,11 +99,11 @@ CREATE TABLE IF NOT EXISTS comment (
 
 (defn save-comment
   "Persist a user account into the database."
-  [{:keys [username password message href]}]
+  [{:keys [username password message href] :as m}]
   (try
     (do (jdbc/insert! db "comment"
                       {:username username
-                       :message (prettify message)
+                       :message (prettify m)
                        :date (str (time-now))
                        :href href})
         :created)

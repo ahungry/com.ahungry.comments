@@ -5,7 +5,7 @@ const baseUrl = 'http://localhost:3001'
 var sourceHref = window.location.href
 
 async function getData (url) {
-  url = url + '?sourceHref=' + sourceHref
+  url = url + '?href=' + sourceHref
   const response = await fetch(url, { method: 'GET' })
 
   return await response.json()
