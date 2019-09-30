@@ -87,15 +87,18 @@ CREATE TABLE IF NOT EXISTS comment (
 (defn save-user
   "Persist a user account into the database."
   [{:keys [username password1]}]
-  (if (> (count (get-user username password1)) 0)
-    ;; User already exists, so this is fine, treat it as a log in.
-    :logged-in
-    (try
-      (do (jdbc/insert! db "user"
-                        {:username username
-                         :password password1})
-          :created)
-      (catch Exception e (log/error (str e)) false))))
+  (let [maybe-user (get-user username password1)]
+    (if (> (count maybe-user) 0)
+      ;; User already exists, so this is fine, treat it as a log in.
+      (first maybe-user)
+      (try
+        (do (jdbc/insert! db "user"
+                          {:username username
+                           :password password1})
+            (first (get-user username password1)))
+        (catch Exception e (log/error (str e))
+               {:error "Bad username / password, or that account already exists."
+                :debug (str e)})))))
 
 (defn save-comment
   "Persist a user account into the database."
@@ -106,5 +109,7 @@ CREATE TABLE IF NOT EXISTS comment (
                        :message (prettify m)
                        :date (str (time-now))
                        :href href})
-        :created)
-    (catch Exception e (log/error (str e)) false)))
+        (get-comments href))
+    (catch Exception e (log/error (str e))
+           {:error "Bad comment data, or that comment already exists."
+            :debug (str e)})))

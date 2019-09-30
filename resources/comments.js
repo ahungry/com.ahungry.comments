@@ -3,6 +3,8 @@ console.log('com.ahungry.comments begin.')
 // Net
 const baseUrl = 'http://localhost:3001'
 var sourceHref = window.location.href
+var username
+var password
 
 async function getData (url) {
   url = url + '?href=' + sourceHref
@@ -19,7 +21,7 @@ async function postData (url = '', data = {}) {
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ sourceHref, ...data })
+    body: JSON.stringify({ href: sourceHref, ...data })
   })
 
   return await response.json();
@@ -63,7 +65,7 @@ function makeSubmit () {
 function makeWrapper () {
   const el = ce('div')
   el.id = 'wrapper'
-  el.style.border = '1px solid #000'
+  el.style.border = '0px solid #000'
   el.style.margin = 'auto'
   el.style.padding = '50px'
 
@@ -109,12 +111,9 @@ Don't forget your password.
   return el
 }
 
-var username
-var password
-
-function doLogin ({ username, password1 }) {
-  username = username
-  password = password1
+function doLogin (m) {
+  username = m.username
+  password = m.password1
   gui.wrapper.removeChild(gui.form)
   gui.wrapper.appendChild(makeFormLoggedIn())
 }
@@ -136,7 +135,7 @@ function makeFormLoggedOut () {
           }
 
           if (res.username) {
-            $('#feedback').innerHTML = ''
+            $('#feedback').innerHTML = 'Logged in!'
             doLogin(res)
           }
         } catch (reason) {
@@ -155,10 +154,15 @@ function makeFormLoggedIn () {
       setTimeout(async () => {
         try {
           const message = $('#message').value
-          const res = await postData('/comment', { username: 'Test', password: 'Test', message })
+          const res = await postData('/comment', { username, password, message })
           console.log('Post send back: ', res)
-          $('#message').value = ''
-          renderComments(res)
+
+          if (res && res.error) {
+            $('#feedback').innerHTML = res.error
+          } else {
+            renderComments(res)
+            $('#message').value = ''
+          }
         } catch (reason) {
           console.log(reason)
         }
@@ -189,7 +193,12 @@ function makeCommentsContainer () {
     gui.wrapper.appendChild(el)
   }
 
-  el.innerHTML = '<h1>Comments</h1>'
+  el.innerHTML = `
+Comments for:
+<br><span style="font-size:.8em">${sourceHref}</span>
+<br><span style="font-size:.7em">hosted by
+<a href="http://comments.ahungry.com">http://comments.ahungry.com</a></span>
+`
 
   return el
 }
@@ -198,6 +207,7 @@ function renderComments (comments) {
   const elC = makeCommentsContainer()
 
   comments.map(renderComment).map(el => elC.appendChild(el))
+  requestResize()
 
   return elC
 }
@@ -209,6 +219,16 @@ async function doComments () {
   return renderComments(comments)
 }
 
+function requestResize () {
+  if (!window || !window.parent) return
+
+  window.parent.postMessage({
+    type: 'resize',
+    w: gui.wrapper.scrollWidth,
+    h: gui.wrapper.scrollHeight + 200,
+  }, '*')
+}
+
 async function init () {
   const comments = await doComments()
   gui.wrapper.appendChild(comments)
@@ -217,11 +237,7 @@ async function init () {
   gui.wrapper.appendChild(gui.feedback)
   document.body.appendChild(gui.wrapper)
 
-  window.parent.postMessage({
-    type: 'resize',
-    w: gui.wrapper.scrollWidth,
-    h: gui.wrapper.scrollHeight + 200,
-  }, '*')
+  requestResize()
 }
 
 window.addEventListener('message', receiveMessage, false);
@@ -268,7 +284,7 @@ function slowInit () {
   init()
 }
 // Stagger loading until we get the proper source href
-if (window.parent) {
+if (window.parent && window.parent != window) {
   slowInit()
 } else {
   init()
