@@ -21,7 +21,7 @@
   <logger name="clojure-example-logback-integration" level="DEBUG"/>
 
   <root level="DEBUG">
-    <appender-ref ref="CONSOLE"/>
+    <appender-ref level="INFO" ref="CONSOLE"/>
     <appender-ref ref="FILE"/>
   </root>
 </configuration>
