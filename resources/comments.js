@@ -29,20 +29,26 @@ const $ = x => document.querySelector(x)
 const $$ = x => document.querySelectorAll(x)
 
 // GUI
-function labeledInput (type, lbl) {
+function labeledThing (thing, type, lbl, id, styles = {}) {
   const label = ce('label')
-  const input = ce('textarea')
-  const span = ce('span')
+  const input = ce(thing)
+  const span = ce('div')
   label.innerHTML = lbl
   input.type = type
-  input.id = 'message'
-  input.style.width = '300px'
-  input.style.height = '100px'
+  input.name = id
+  input.id = id
+  Object.keys(styles).forEach(key => {
+    input.style[key] = styles[key]
+  })
   span.appendChild(label)
   span.appendChild(input)
 
   return span
 }
+
+const labeledInput = labeledThing.bind(labeledThing, 'input', 'text')
+const labeledTextarea = labeledThing.bind(labeledThing, 'textarea', 'text')
+const labeledPassword = labeledThing.bind(labeledThing, 'input', 'password')
 
 function makeSubmit () {
   const el = ce('button')
@@ -60,7 +66,9 @@ function makeWrapper () {
 
 function makeForm () {
   const el = ce('form')
-  el.appendChild(labeledInput('text', 'Comment: '))
+  el.appendChild(labeledInput('Username: ', 'username'))
+  el.appendChild(labeledPassword('Password: ', 'password'))
+  el.appendChild(labeledTextarea('Comment: ', 'message', { width: '300px', 'height': '100px' }))
   el.appendChild(ce('submit'))
   el.appendChild(makeSubmit())
   el.onsubmit = async (e) => {

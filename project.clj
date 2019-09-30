@@ -9,6 +9,7 @@
                  [cheshire "5.9.0"]
                  [http-kit "2.3.0"]
                  [ring "1.7.1"]
+                 [markdown-clj "1.10.0"]
                  ;; Logging related
                  [ch.qos.logback/logback-classic "1.2.3"]
                  [org.clojure/tools.logging "0.5.0"]
