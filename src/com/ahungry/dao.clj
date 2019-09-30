@@ -9,16 +9,34 @@
    ))
 
 (defn data-dir-db []
-  (str (xdg-rc/get-xdg-data-dir) "/ahungry-determinism.db"))
+  (str (xdg-rc/get-xdg-data-dir) "/com.ahungry.comments.db"))
 
 (def db
   {:classname "org.sqlite.JDBC"
    :subprotocol "sqlite"
    :subname (data-dir-db)})
 
+(defn wipe-db []
+  (jdbc/execute! db ["
+DROP TABLE IF EXISTS user;
+DROP TABLE IF EXISTS comment;
+"]))
+
 (defn make-db []
-  (jdbc/execute! db ["CREATE TABLE IF NOT EXISTS det (
-identity, input, input_types, output, output_type, date);"]))
+  (jdbc/execute! db ["
+CREATE TABLE IF NOT EXISTS user (
+  username PRIMARY KEY UNIQUE,
+  password
+);
+
+CREATE TABLE IF NOT EXISTS comment (
+  username,
+  date,
+  message,
+  href,
+  PRIMARY KEY (message, href) UNIQUE
+);
+"]))
 
 (defn time-now []
   (str (t/local-date-time)))
@@ -31,6 +49,9 @@ identity, input, input_types, output, output_type, date);"]))
     (log/debug ss)
     (log/debug result)
     result))
+
+(defn test-db []
+  (q ["select * from user"]))
 
 (defn escape-images [text state]
   [(clojure.string/replace text #"(!\[.*?\]\()(.+?)(\))" "") state])
@@ -47,6 +68,22 @@ identity, input, input_types, output, output_type, date);"]))
           \" "&quot;"
           \' "&#39;"})
        text) state])
+
+(defn get-user [username password]
+  (q ["SELECT * from user WHERE username = ? AND password = ? " username password]))
+
+(defn save-user
+  "Persist a user account into the database."
+  [{:keys [username password1]}]
+  (if (> (count (get-user username password1)) 0)
+    ;; User already exists, so this is fine, treat it as a log in.
+    :logged-in
+    (try
+      (do (jdbc/insert! db "user"
+                        {:username username
+                         :password password1})
+          :created)
+      (catch Exception e (log/error (str e)) false))))
 
 (defn save [x]
   x)
