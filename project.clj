@@ -21,6 +21,9 @@
                  [org.clojure/java.jdbc "0.3.5"]
                  [org.xerial/sqlite-jdbc "3.7.2"]
 
+                 ;; Crypto
+                 [crypto-password "0.2.1"]
+
                  ;; Extras
                  [markdown-clj "1.10.0"]
 

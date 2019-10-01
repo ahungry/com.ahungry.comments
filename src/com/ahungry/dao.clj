@@ -6,6 +6,7 @@
    [markdown.core :as md]
    [java-time :as t]
    [xdg-rc.core :as xdg-rc]
+   [crypto.password.pbkdf2 :as password]
    ))
 
 (defn data-dir-db []
@@ -76,8 +77,12 @@ CREATE TABLE IF NOT EXISTS comment (
 (defn get-comments [href]
   (q ["SELECT * FROM comment WHERE href = ?" href]))
 
-(defn get-user [username password]
-  (q ["SELECT * from user WHERE username = ? AND password = ? " username password]))
+(defn get-user [username]
+  (q ["SELECT * from user WHERE username = ? " username]))
+
+(defn assert-password [{:keys [password]} plaintext-password]
+  (when-not (password/check plaintext-password password)
+    (throw (Exception. "Invalid password!"))))
 
 (defn prettify [{:keys [message]}]
   (md/md-to-html-string
@@ -87,15 +92,17 @@ CREATE TABLE IF NOT EXISTS comment (
 (defn save-user
   "Persist a user account into the database."
   [{:keys [username password1]}]
-  (let [maybe-user (get-user username password1)]
+  (let [maybe-user (get-user username)]
     (if (> (count maybe-user) 0)
       ;; User already exists, so this is fine, treat it as a log in.
-      (first maybe-user)
+      (do
+        (assert-password (first maybe-user) password1)
+        (first maybe-user))
       (try
         (do (jdbc/insert! db "user"
                           {:username username
-                           :password password1})
-            (first (get-user username password1)))
+                           :password (password/encrypt password1)})
+            (first (get-user username)))
         (catch Exception e (log/error (str e))
                {:error "Bad username / password, or that account already exists."
                 :debug (str e)})))))

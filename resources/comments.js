@@ -88,7 +88,7 @@ var gui = {
   // Form fields
   username: labeledInput('Username: ', 'username'),
   password1: labeledPassword('Password: ', 'password1'),
-  password2: labeledPassword('Confirm Password: ', 'password2'),
+  password2: labeledPassword('Confirm Password (optional): ', 'password2'),
   comment: labeledTextarea('Comment (supports markdown): ', 'message', { width: '300px', 'height': '100px' }),
   submit: makeSubmit(),
 }

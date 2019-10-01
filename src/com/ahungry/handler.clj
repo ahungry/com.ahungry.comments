@@ -18,8 +18,9 @@
         :status 400})))
 
 (defn assert-password [{:keys [password1 password2]}]
-  (when-not (= password1 password2)
-    (throw (Throwable. "Passwords do not match."))))
+  (when (and password2 (> (count password2) 0))
+    (when-not (= password1 password2)
+      (throw (Throwable. "Passwords do not match.")))))
 
 (defn login [m]
   (with-json m
