@@ -16,13 +16,14 @@
 (defn version [req] {:body "0.0.1"})
 
 (defroutes all-routes
+  (OPTIONS "*" [] {:body []})
   (GET "/" [] (slurp "resources/index.html"))
   (GET "/comments.css" [] {:body (slurp "resources/comments.css") :headers {"Content-Type" "text/css"}})
   (GET "/comments.js" [] (slurp "resources/comments.js"))
   (GET "/version" [] version)
-  (GET "/comments" req (handler/comments req))
+  (GET "/comments" req (handler/get-comments req))
   (POST "/login" req (handler/login (:body-params req)))
-  (POST "/comment" req (handler/comment (:body-params req)))
+  (POST "/comment" req (handler/add-comment (:body-params req)))
   )
 
 (defn wrap-headers [handler]

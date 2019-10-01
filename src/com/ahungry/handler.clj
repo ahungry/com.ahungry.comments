@@ -30,12 +30,12 @@
 (defn assert-comment [_]
   true)
 
-(defn comment [m]
+(defn add-comment [m]
   (with-json m
     (do (assert-comment m)
         (dao/save-comment m))))
 
-(defn comments [req]
+(defn get-comments [req]
   (log/info "Request input was: " req)
   (with-json req
     (do (dao/get-comments (get-in req [:query-params :href])))))
