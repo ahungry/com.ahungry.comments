@@ -1,7 +1,8 @@
 console.log('com.ahungry.comments begin.')
 
 // Net
-const baseUrl = 'http://localhost:3001'
+// const baseUrl = 'http://localhost:3001'
+const baseUrl = window.location.protocol + '//' + window.location.host
 var sourceHref = window.location.href
 var username
 var password
