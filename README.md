@@ -34,8 +34,9 @@ If you want to ensure your comments for many different sites do not disappear, y
 # Why didn't you add 'XYZ Auth provider' like other 'ABC Service' has?
 
 I don't think many of the common IDP providers (Google SAML / IDP,
-Facebook etc.) are very privacy friendly (one of the main reasons I
-wrote this implementation was that my old one was very heavy on
+Facebook etc.) are very privacy friendly or open with their
+implementations (one of the main reasons I wrote this implementation
+was that my old "single line of JS" usage (Disqus) was very heavy on
 ads/tracking...hundreds of remote assets being downloaded just to
 include their javascript for commenting on my site).
 
