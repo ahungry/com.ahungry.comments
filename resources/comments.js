@@ -220,6 +220,7 @@ function makeCommentsContainer () {
   el.innerHTML = `
 <span style="font-size:.7em">comments by:
 <a href="http://comments.ahungry.com" target="_blank">http://comments.ahungry.com</a>
+| AGPLv3:
 <a href="https://github.com/ahungry/com.ahungry.comments" target="_blank">https://github.com/ahungry/com.ahungry.comments</a></span>
 `
 
