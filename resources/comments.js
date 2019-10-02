@@ -6,7 +6,7 @@ function getPreferredWidth () {
   const m = window.location.href.match(/w=(.*)/)
 
   if (null === m) {
-    return (document.body.offsetWidth / 2) + 'px'
+    return (document.body.offsetWidth * 0.9) + 'px'
   }
 
   return m[1] + 'px'
