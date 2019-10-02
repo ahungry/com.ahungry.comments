@@ -31,7 +31,7 @@ Oh, for now, it requires no registration or setup to use on your own site, but p
 If you want to ensure your comments for many different sites do not disappear, you should clone the AGPLv3 codebase and run your own copy (and then add the single include on your sites).
 ```
 
-# Why didn't you add <XYZ Auth provider> like other <ABC Service> has?
+# Why didn't you add 'XYZ Auth provider' like other 'ABC Service' has?
 
 I don't think many of the common IDP providers (Google SAML / IDP,
 Facebook etc.) are very privacy friendly (one of the main reasons I
