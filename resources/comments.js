@@ -2,7 +2,18 @@ console.log('com.ahungry.comments begin.')
 
 // Net
 // const baseUrl = 'http://localhost:3001'
-const baseUrl = window.location.protocol + '//' + window.location.host
+
+const isIframed = _ => window.parent && window.parent != window
+
+function getBaseUrl () {
+  if (isIframed()) {
+    return 'https://comments.ahungry.com'
+  }
+
+  return window.location.protocol + '//' + window.location.host
+}
+
+const baseUrl = getBaseUrl()
 var sourceHref = window.location.href
 var username
 var password
@@ -286,7 +297,7 @@ function slowInit () {
   init()
 }
 // Stagger loading until we get the proper source href
-if (window.parent && window.parent != window) {
+if (isIframed()) {
   slowInit()
 } else {
   init()
