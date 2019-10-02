@@ -27,7 +27,7 @@
                            :headers {"Content-Type" "text/css"}})
 
   ;; Javascript
-  (GET "/iframe.js" [] {:body (slurp "resources/comments.js")
+  (GET "/iframe.js" [] {:body (slurp "resources/iframe.js")
                         :headers {"Content-Type" "application/javascript"}})
   (GET "/comments.js" [] {:body (slurp "resources/comments.js")
                           :headers {"Content-Type" "application/javascript"}})
