@@ -2,24 +2,13 @@ console.log('com.ahungry.comments begin.')
 
 // Net
 // const baseUrl = 'http://localhost:3001'
-
-const isIframed = _ => window.parent && window.parent != window
-
-function getBaseUrl () {
-  if (isIframed()) {
-    return 'https://comments.ahungry.com'
-  }
-
-  return window.location.protocol + '//' + window.location.host
-}
-
-const baseUrl = getBaseUrl()
+const baseUrl = window.location.protocol + '//' + window.location.host
 var sourceHref = window.location.href
 var username
 var password
 
 async function getData (url) {
-  url = url + '?href=' + sourceHref
+  url = baseUrl + url + '?href=' + sourceHref
   const response = await fetch(url, { method: 'GET' })
 
   return await response.json()
@@ -297,7 +286,7 @@ function slowInit () {
   init()
 }
 // Stagger loading until we get the proper source href
-if (isIframed()) {
+if (window.parent && window.parent != window) {
   slowInit()
 } else {
   init()
