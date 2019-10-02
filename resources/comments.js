@@ -6,7 +6,7 @@ function getPreferredWidth () {
   const m = window.location.href.match(/w=(.*)/)
 
   if (null === m) {
-    return window.location.scrollWidth + 'px'
+    return window.innerWidth + 'px'
   }
 
   return m[1] + 'px'
