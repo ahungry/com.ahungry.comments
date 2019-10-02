@@ -205,9 +205,7 @@ function makeFormLoggedIn () {
 
 function renderComment ({ date, message, username }) {
   const el = ce('div')
-  el.style.background = 'rgba(0, 0, 0, .1)'
-  el.style.margin = '5px'
-  el.style.padding = '15px'
+  el.className = 'comment-item'
   el.innerHTML = `
 <span style='font-size:.8rem;'>
   posted by <b>${username}</b> on ${date}:
