@@ -257,6 +257,14 @@ function handler (m) {
       sourceHref = m.val
       wasGetHrefDone = true
       break
+
+    case 'resize':
+      const { w, h } = m
+      gui.wrapper.scrollWidth = w
+      gui.wrapper.scrollHeight = h
+      gui.wrapper.style.width = `${w}px`
+      gui.wrapper.style.height = `${h}px`
+      break
   }
 }
 function receiveMessage (event) {
