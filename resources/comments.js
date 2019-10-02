@@ -182,7 +182,9 @@ function makeFormLoggedIn () {
           if (res && res.error) {
             $('#feedback').innerHTML = res.error
           } else {
+            requestResizeSent = false
             renderComments(res)
+            requestResize()
             $('#message').value = ''
           }
         } catch (reason) {
@@ -230,7 +232,6 @@ function renderComments (comments) {
   const elC = makeCommentsContainer()
 
   comments.map(renderComment).map(el => elC.appendChild(el))
-  requestResize()
 
   return elC
 }
@@ -252,7 +253,7 @@ function requestResize () {
   requestResizeSent = true
   window.parent.postMessage({
     type: 'resize',
-    w: gui.wrapper.scrollWidth + 20,
+    w: getPreferredWidth(),
     h: gui.wrapper.scrollHeight + 200,
   }, '*')
 }
