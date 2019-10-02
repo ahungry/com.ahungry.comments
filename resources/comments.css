@@ -2,14 +2,16 @@
   background: rgba(0, 0, 0, .05);
   margin-top: 10px;
   overflow-y: scroll;
-  padding: 3px;
+  padding: 8px;
 }
 
 .comment-item code {
   background: #333;
   color: #fff;
+  display: block;
+  overflow-x: none;
   overflow-y: scroll;
-  padding: 4px;
+  padding: 10px;
 }
 
 /* If width is less than 600 do this stuff */
