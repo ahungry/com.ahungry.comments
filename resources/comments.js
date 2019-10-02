@@ -2,6 +2,16 @@ console.log('com.ahungry.comments begin.')
 
 // Net
 // const baseUrl = 'http://localhost:3001'
+function getPreferredWidth () {
+  const m = window.location.href.match(/w=(.*)/)
+
+  if (null === m) {
+    return window.location.scrollWidth + 'px'
+  }
+
+  return m[1] + 'px'
+}
+
 const isIframed = _ => window && window.parent != window
 const getBaseUrl = _ => isIframed() ?
   'https://comments.ahungry.com' :
@@ -12,8 +22,13 @@ var sourceHref = window.location.href
 var username
 var password
 
+function getCleanHref (href) {
+  return href.replace(/[\?#].*$/gi, '')
+}
+
 async function getData (url) {
-  url = baseUrl + url + '?href=' + sourceHref
+  const cleanSourceHref = getCleanHref(sourceHref)
+  url = baseUrl + url + '?href=' + cleanSourceHref
   const response = await fetch(url, { method: 'GET' })
 
   return await response.json()
@@ -21,13 +36,14 @@ async function getData (url) {
 
 async function postData (url = '', data = {}) {
   url = baseUrl + url
+  const cleanSourceHref = getCleanHref(sourceHref)
 
   const response = await fetch(url, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ href: sourceHref, ...data })
+    body: JSON.stringify({ href: cleanSourceHref, ...data })
   })
 
   return await response.json();
@@ -214,7 +230,7 @@ function renderComments (comments) {
   const elC = makeCommentsContainer()
 
   comments.map(renderComment).map(el => elC.appendChild(el))
-  // requestResize()
+  requestResize()
 
   return elC
 }
@@ -226,8 +242,6 @@ async function doComments () {
   return renderComments(comments)
 }
 
-// Not sure why I thought this would be useful - the child shouldn't resize
-// the parent's Iframe in the major usage case.
 function requestResize () {
   if (!window || !window.parent) return
 
@@ -246,7 +260,8 @@ async function init () {
   gui.wrapper.appendChild(gui.feedback)
   document.body.appendChild(gui.wrapper)
 
-  // requestResize()
+  gui.wrapper.style.width = getPreferredWidth()
+  requestResize()
 }
 
 window.addEventListener('message', receiveMessage, false);
