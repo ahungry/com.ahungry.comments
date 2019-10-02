@@ -13,9 +13,18 @@ function getPreferredWidth () {
 }
 
 const isIframed = _ => window && window.parent != window
-const getBaseUrl = _ => isIframed() ?
-  'https://comments.ahungry.com' :
-  window.location.protocol + '//' + window.location.host
+
+// Hmm...this is only really useful if we're running a local server.
+// If we're running off our file:// proto, we would always want the main base.
+function getBaseUrl () {
+  const proto = window.location.protocol
+
+  if (proto !== 'http' && proto !== 'https') {
+    return 'https://comments.ahungry.com'
+  }
+
+  return proto + '//' + window.location.host
+}
 
 const baseUrl = getBaseUrl()
 var sourceHref = window.location.href
