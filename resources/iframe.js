@@ -31,6 +31,7 @@ function handler (m) {
 function receiveMessage (event) {
   // Events that get handled up at the potential iframe source.
   if (event.origin === 'http://comments.ahungry.com' ||
+    event.origin === 'https://comments.ahungry.com' ||
     event.origin === 'http://localhost:3001') {
     const { data } = event
     handler(data)

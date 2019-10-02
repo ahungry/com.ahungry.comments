@@ -13,13 +13,26 @@
 ;; (dao/wipe-db)
 (dao/make-db)
 (def ^:dynamic *port* 3001)
-(defn version [req] {:body "0.0.1"})
+(defn version [req] {:body "0.0.2"})
 
 (defroutes all-routes
+  ;; Options
   (OPTIONS "*" [] {:body []})
+
+  ;; HTML
   (GET "/" [] (slurp "resources/index.html"))
-  (GET "/comments.css" [] {:body (slurp "resources/comments.css") :headers {"Content-Type" "text/css"}})
-  (GET "/comments.js" [] (slurp "resources/comments.js"))
+
+  ;; CSS
+  (GET "/comments.css" [] {:body (slurp "resources/comments.css")
+                           :headers {"Content-Type" "text/css"}})
+
+  ;; Javascript
+  (GET "/iframe.js" [] {:body (slurp "resources/comments.js")
+                        :headers {"Content-Type" "application/javascript"}})
+  (GET "/comments.js" [] {:body (slurp "resources/comments.js")
+                          :headers {"Content-Type" "application/javascript"}})
+
+  ;; JSON
   (GET "/version" [] version)
   (GET "/comments" req (handler/get-comments req))
   (POST "/login" req (handler/login (:body-params req)))
