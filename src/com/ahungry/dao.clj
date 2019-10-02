@@ -21,6 +21,7 @@
   (jdbc/execute! db ["DROP TABLE IF EXISTS user;"])
   (jdbc/execute! db ["DROP TABLE IF EXISTS comment;"]))
 
+;; FIXME: This only executes one of the lines in there, ugh.
 (defn seed-db
   "Put in the initial data."
   []
@@ -42,7 +43,7 @@ CREATE TABLE IF NOT EXISTS comment (
   href NOT NULL,
   UNIQUE (message, href)
 );"])
-  (seed-db)
+  ;; (seed-db)
   )
 
 (defn reload-db []
