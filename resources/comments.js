@@ -242,12 +242,17 @@ async function doComments () {
   return renderComments(comments)
 }
 
+// Ensure we only request a resize once, not more.
+var requestResizeSent = false
+
 function requestResize () {
   if (!window || !window.parent) return
+  if (requestResizeSent) return
 
+  requestResizeSent = true
   window.parent.postMessage({
     type: 'resize',
-    w: gui.wrapper.scrollWidth + 100,
+    w: gui.wrapper.scrollWidth + 20,
     h: gui.wrapper.scrollHeight + 200,
   }, '*')
 }
