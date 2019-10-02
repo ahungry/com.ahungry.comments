@@ -214,7 +214,7 @@ function renderComments (comments) {
   const elC = makeCommentsContainer()
 
   comments.map(renderComment).map(el => elC.appendChild(el))
-  requestResize()
+  // requestResize()
 
   return elC
 }
@@ -226,6 +226,8 @@ async function doComments () {
   return renderComments(comments)
 }
 
+// Not sure why I thought this would be useful - the child shouldn't resize
+// the parent's Iframe in the major usage case.
 function requestResize () {
   if (!window || !window.parent) return
 
@@ -244,7 +246,7 @@ async function init () {
   gui.wrapper.appendChild(gui.feedback)
   document.body.appendChild(gui.wrapper)
 
-  requestResize()
+  // requestResize()
 }
 
 window.addEventListener('message', receiveMessage, false);
