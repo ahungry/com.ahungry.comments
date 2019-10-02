@@ -1,0 +1,13 @@
+INSERT INTO "comment" (username, date, message, href) VALUES('ahungry','2019-09-30T23:55:47.292','<p>Check out the links above to learn more.</p>','http://comments.ahungry.com/');
+INSERT INTO "comment" (username, date, message, href) VALUES('ahungry','2019-10-01T01:00:10.620','<p>Check out the links for more information!</p>','https://comments.ahungry.com/');
+INSERT INTO "comment" (username, date, message, href) VALUES('ahungry','2019-10-02T01:27:01.246','<p>This is a comment system that you can include with a single line of javascript:</p><pre><code class="html">&lt;script src=&quot;https://comments.ahungry.com/comments.js&quot;&gt;&lt;/script&gt;
+</code></pre><p>It supports full <em>markdown</em> in the comment blocks, and should safely escape some HTML.<br /></p>','https://comments.ahungry.com/');
+INSERT INTO "comment" (username, date, message, href) VALUES('ahungry','2019-10-02T01:32:15.082','<pre><code>           &lt;iframe frameborder=&quot;0&quot;
+             height=&quot;500&quot;
+             width=&quot;800&quot;
+             id=&quot;comments-frame&quot;
+             style=&quot;width:800px;height:auto;&quot;
+             src=&quot;https://comments.ahungry.com/?w=500&quot;&gt;&lt;/iframe&gt;
+           &lt;script src=&quot;https://comments.ahungry.com/iframe.js&quot;&gt;&lt;/script&gt;
+</code></pre><p>Using the above snippet, you can also include the comment area as an iframe, to avoid impacting your main site with javascript injection.</p>','https://comments.ahungry.com/');
+INSERT INTO "comment" (username, date, message, href) VALUES('ahungry','2019-10-02T01:34:18.225','<p>Oh, for now, it requires no registration or setup to use on your own site, but please understand it&#39;s essentially ephemeral at that point! </p><p>If you want to ensure your comments for many different sites do not disappear, you should clone the AGPLv3 codebase and run your own copy (and then add the single include on your sites).</p>','https://comments.ahungry.com/');

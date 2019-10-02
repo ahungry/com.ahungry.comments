@@ -21,20 +21,29 @@
   (jdbc/execute! db ["DROP TABLE IF EXISTS user;"])
   (jdbc/execute! db ["DROP TABLE IF EXISTS comment;"]))
 
+(defn seed-db
+  "Put in the initial data."
+  []
+  (jdbc/execute! db [(slurp "sql/seed.sql")]))
+
 (defn make-db []
   (jdbc/execute! db ["
 CREATE TABLE IF NOT EXISTS user (
-  username PRIMARY KEY UNIQUE,
+  user_id INTEGER PRIMARY KEY AUTOINCREMENT,
+  username UNIQUE,
   password
 );"])
   (jdbc/execute! db ["
 CREATE TABLE IF NOT EXISTS comment (
+  comment_id INTEGER PRIMARY KEY AUTOINCREMENT,
   username NOT NULL,
   date NOT NULL,
   message NOT NULL,
   href NOT NULL,
-  PRIMARY KEY (message, href)
-);"]))
+  UNIQUE (message, href)
+);"])
+  (seed-db)
+  )
 
 (defn reload-db []
   (wipe-db)
