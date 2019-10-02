@@ -247,7 +247,7 @@ function requestResize () {
 
   window.parent.postMessage({
     type: 'resize',
-    w: gui.wrapper.scrollWidth,
+    w: gui.wrapper.scrollWidth + 100,
     h: gui.wrapper.scrollHeight + 200,
   }, '*')
 }
