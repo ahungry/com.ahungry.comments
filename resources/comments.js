@@ -97,8 +97,9 @@ function makeWrapper () {
   const el = ce('div')
   el.id = 'wrapper'
   el.style.border = '0px solid #000'
-  el.style.margin = 'auto'
-  el.style.padding = '50px'
+  el.style.margin = 'left'
+  el.style.padding = '5px'
+  el.style.maxWidth = '100%'
 
   return el
 }
