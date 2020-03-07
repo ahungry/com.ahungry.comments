@@ -9,12 +9,16 @@ FROM clojure:alpine
 
 # Done with host OS setup work - now to build the app.
 
+# Use a non root user
+RUN yes dummy | adduser dummy
+#RUN yes dummy | passwd dummy
+RUN mkdir -p /home/dummy
+
 WORKDIR /app
 
 COPY . /app
 
-RUN mkdir -p /root/.local/share
-RUN mkdir -p /root/.local/bin
+RUN chown -R dummy:dummy /app
 
 RUN lein deps
 

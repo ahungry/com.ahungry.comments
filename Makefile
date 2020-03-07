@@ -9,7 +9,8 @@ test:
 
 start:
 	docker run \
-	-v $(PWD)/docker-data:/root/.local \
+	-u $(shell id -u) \
+	-v $(PWD)/docker-data:/home/dummy \
 	-p 3001:3001 \
 	--rm -it ahungry/com.ahungry.comments
 
