@@ -9,8 +9,8 @@ test:
 
 start:
 	docker run \
-	-v docker-data/.local:/root/.local \
+	-v docker-data:/root/.local \
 	-p 3001:3001 \
-	-it ahungry/com.ahungry.comments
+	--rm -it ahungry/com.ahungry.comments
 
 .PHONY: test
