@@ -11,7 +11,7 @@ start:
 	docker run \
 	-m 256m \
 	-u $(shell id -u) \
-	-v $(PWD)/docker-data:/home/dummy \
+	-v $(PWD)/docker-data/.local:/home/dummy/.local \
 	-p 3001:3001 \
 	--rm -it ahungry/com.ahungry.comments
 

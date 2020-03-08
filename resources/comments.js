@@ -19,7 +19,7 @@ const isIframed = _ => window && window.parent != window
 function getBaseUrl () {
   const proto = window.location.protocol
 
-  if (proto !== 'http' && proto !== 'https') {
+  if (proto !== 'http:' && proto !== 'https:') {
     return 'https://comments.ahungry.com'
   }
 
