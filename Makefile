@@ -9,6 +9,7 @@ test:
 
 start:
 	docker run \
+	-m 256m \
 	-u $(shell id -u) \
 	-v $(PWD)/docker-data:/home/dummy \
 	-p 3001:3001 \

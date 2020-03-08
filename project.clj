@@ -34,4 +34,9 @@
   :main ^:skip-aot com.ahungry.comments
   :target-path "target/%s"
   :repl-options {:init-ns com.ahungry.comments}
+  :jvm-opts [
+             ;; Memory settings
+             ;; "-Xms32M"
+             ;; "-Xmx64M"
+             "-Dfile.encoding=UTF8"]
   :profiles {:uberjar {:aot :all}})
