@@ -16,10 +16,12 @@ RUN mkdir -p /home/dummy
 
 WORKDIR /app
 
-COPY . /app
-
+COPY project.clj /app/project.clj
 RUN chown -R dummy:dummy /app
 
-RUN lein deps
+RUN su -c'lein deps' dummy
+
+COPY . /app
+RUN chown -R dummy:dummy /app
 
 CMD lein run
